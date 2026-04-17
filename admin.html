@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin V4 | لوحة المشرف</title>
+    <meta
+      name="description"
+      content="لوحة تحكم المشرف الخاصة بمنصة قياس الذكاء - إصدار V4."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- API Client for backend communication -->
+    <script src="api/client.js"></script>
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
+    <div class="noise-layer"></div>
+
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="index.html" class="brand">
+          <span class="brand-mark"></span>
+          <span>Admin <b>V4</b></span>
+        </a>
+
+        <div class="nav-links">
+          <a href="index.html">العودة للموقع</a>
+          <a href="#adminPanel">لوحة التحكم</a>
+          <a href="#resultsWrap">النتائج</a>
+        </div>
+
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+      </div>
+    </nav>
+
+    <header class="hero admin-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal active">
+          <span class="eyebrow">لوحة المشرف الاحترافية</span>
+          <h1>تحكم كامل في النتائج<br />بواجهة فخمة وتحليل ذكي</h1>
+          <p>
+            لوحة إدارة متطورة لعرض النتائج، وتحليل مستويات المستخدمين، وفرز
+            البيانات، وتصديرها، مع رسوم بيانية عصرية جذابة.
+          </p>
+        </div>
+
+        <div class="hero-side reveal active">
+          <div class="hero-glass">
+            <div class="mini-stat">
+              <h3>Charts</h3>
+              <p>رسوم بيانية</p>
+            </div>
+            <div class="mini-stat">
+              <h3>JSON</h3>
+              <p>تصدير النتائج</p>
+            </div>
+            <div class="mini-stat">
+              <h3>Sort</h3>
+              <p>فرز ذكي</p>
+            </div>
+            <div class="mini-stat">
+              <h3>Admin</h3>
+              <p>تحكم كامل</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Login -->
+    <section class="section" id="adminLoginSection">
+      <div class="container">
+        <div class="section-head reveal active">
+          <span class="section-chip">تسجيل دخول المشرف</span>
+          <h2>الدخول إلى لوحة التحكم</h2>
+          <p>أدخل كلمة المرور للوصول إلى جميع النتائج والتحليلات.</p>
+        </div>
+
+        <div class="glass-card admin-login-v4 reveal active">
+          <div class="admin-lock-badge">🔐</div>
+
+          <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input
+              type="email"
+              id="adminEmail"
+              placeholder="أدخل البريد الإلكتروني"
+              value="admin@zakatech.com"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>كلمة المرور</label>
+            <input
+              type="password"
+              id="adminPassword"
+              placeholder="أدخل كلمة المرور"
+            />
+          </div>
+
+          <div class="actions-center">
+            <button class="btn btn-primary" onclick="adminLogin()">
+              دخول لوحة المشرف
+            </button>
+          </div>
+
+          <p id="adminMsg" class="empty-text" style="margin-top: 12px"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel -->
+    <section class="section hidden" id="adminPanel">
+      <div class="container">
+        <div class="section-head reveal active">
+          <span class="section-chip">Admin Dashboard</span>
+          <h2>لوحة تحكم المشرف</h2>
+          <p>متابعة دقيقة للنتائج، المستويات، والإحصائيات العامة.</p>
+        </div>
+
+        <!-- Top Stats -->
+        <div class="admin-stats-grid reveal active">
+          <div class="admin-stat-box">
+            <span>إجمالي النتائج</span>
+            <h3 id="totalResultsCount">0</h3>
+          </div>
+
+          <div class="admin-stat-box">
+            <span>أعلى نسبة</span>
+            <h3 id="highestScore">0%</h3>
+          </div>
+
+          <div class="admin-stat-box">
+            <span>متوسط الأداء</span>
+            <h3 id="averageScore">0%</h3>
+          </div>
+
+          <div class="admin-stat-box">
+            <span>عدد الممتاز</span>
+            <h3 id="excellentCount">0</h3>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="glass-card reveal active">
+          <div class="admin-toolbar-v4">
+            <div class="input-group admin-select-group">
+              <label>ترتيب النتائج</label>
+              <select id="sortResults" onchange="loadAdminResults()">
+                <option value="latest">حسب الأحدث</option>
+                <option value="highest">حسب أعلى نسبة</option>
+                <option value="lowest">حسب أقل نسبة</option>
+                <option value="level">حسب المستوى</option>
+                <option value="name">حسب الاسم</option>
+              </select>
+            </div>
+
+            <div class="input-group admin-search-group">
+              <label>بحث باسم المستخدم</label>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="اكتب الاسم للبحث..."
+                oninput="loadAdminResults()"
+              />
+            </div>
+
+            <div class="admin-action-buttons">
+              <button class="btn btn-soft" onclick="exportResults()">
+                تصدير JSON
+              </button>
+              <button class="btn btn-soft" onclick="logoutAdmin()">
+                تسجيل خروج
+              </button>
+              <button class="btn btn-gold" onclick="clearAllResults()">
+                حذف جميع النتائج
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="admin-chart-grid reveal active">
+          <div class="glass-card chart-box">
+            <div class="chart-title">
+              <h3>توزيع النتائج حسب المستوى</h3>
+              <p>رسم بياني عمودي يوضح عدد النتائج في كل مستوى.</p>
+            </div>
+            <canvas id="resultsChart"></canvas>
+          </div>
+
+          <div class="glass-card chart-box">
+            <div class="chart-title">
+              <h3>النسب المئوية للمستخدمين</h3>
+              <p>رسم دائري يوضح مستويات النتائج المحفوظة.</p>
+            </div>
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="glass-card reveal active" id="resultsWrap">
+          <div class="chart-title">
+            <h3>قائمة النتائج التفصيلية</h3>
+            <p>يمكنك مراجعة جميع بيانات المستخدمين والاختبارات من هنا.</p>
+          </div>
+
+          <div id="adminResultsList" class="admin-results-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer-content">
+        <p>لوحة المشرف V4 - منصة قياس الذكاء</p>
+        <a href="index.html">العودة للموقع الرئيسي</a>
+      </div>
+    </footer>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

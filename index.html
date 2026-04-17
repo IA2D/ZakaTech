@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ذكاء تك | منصة اختبارات الذكاء</title>
+    <meta
+      name="description"
+      content="ذكاء تك: منصة عربية تفاعلية لاختبارات مستوحاة من نظريات علماء الذكاء مع نتائج محفوظة وسجل وطباعة PDF."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="popup-styles.css" />
+
+    <!-- Three.js for exceptional 3D brain visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- API Client for backend communication -->
+    <script src="api/client.js"></script>
+
+  </head>
+
+  <body>
+    <div id="splash">
+      <div class="splash-card">
+        <div class="brain-orb"></div>
+        <h1>ذكاء تك</h1>
+        <p>جاري تحميل التجربة...</p>
+      </div>
+    </div>
+
+    <audio id="timeoutSound" src="sounds/timeout.mp3"></audio>
+
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
+    <div class="noise-layer"></div>
+
+    <nav class="navbar">
+      <div class="container nav-content">
+        <a href="#home" class="brand">
+          <span class="logo-mark" aria-hidden="true">
+            <!-- Logo SVG -->
+            <svg width="26" height="26" viewBox="0 0 64 64" fill="none">
+              <path
+                d="M25 10c-7 2-12 9-12 18 0 6 2 11 6 14v10c0 2 2 4 4 4h6"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <path
+                d="M39 10c7 2 12 9 12 18 0 6-2 11-6 14v10c0 2-2 4-4 4h-6"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <path
+                d="M24 24h16M24 34h16"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          <span>ذكاء <b>تك</b></span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#home">الرئيسية</a>
+          <a href="#tests">الاختبارات</a>
+          <a href="#scientists">العلماء</a>
+          <a href="#result">النتيجة</a>
+          <a href="#history">السجل</a>
+          <a href="#developers">المطورين</a>
+          <a href="admin.html" id="adminNavLink" class="hidden">لوحة الأدمن</a>
+        </div>
+
+        <div class="nav-auth">
+          <!-- Guest buttons -->
+          <div id="navGuest" class="nav-auth-buttons">
+            <button class="btn btn-soft" onclick="openAuthModal('login')">دخول</button>
+            <button class="btn btn-primary" onclick="openAuthModal('register')">تسجيل</button>
+          </div>
+          <!-- Logged in user info -->
+          <div id="navUser" class="nav-user-info hidden">
+            <span id="navUserName" class="user-name"></span>
+            <span id="navAdminBadge" class="admin-badge hidden">أدمن</span>
+            <button class="btn btn-soft" onclick="logoutUser()">خروج</button>
+          </div>
+        </div>
+
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+      </div>
+    </nav>
+
+    <!-- 1) الرئيسية -->
+    <header class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">منصة عربية تفاعلية</span>
+          <h1>ذكاء تك<br />اختبارات علماء + واجهة 3D</h1>
+          <p>
+            اختبر قدراتك عبر اختبارات تعليمية مستوحاة من نظريات علماء الذكاء.
+            احفظ نتائجك على جهازك، راجع سجل اختباراتك بالتاريخ، واطبع تقريرك
+            PDF.
+          </p>
+
+          <div class="hero-pills">
+            <span>واجهة 3D</span>
+            <span>8 اختبارات علماء</span>
+            <span>حساب محلي</span>
+            <span>طباعة PDF</span>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#user" class="btn btn-primary">ابدأ الآن</a>
+            <a href="#tests" class="btn btn-soft">اذهب للاختبارات</a>
+          </div>
+
+          <div
+            id="sessionMini"
+            class="welcome-box hidden"
+            style="margin-top: 16px"
+          ></div>
+        </div>
+
+        <div class="hero-side reveal">
+          <div class="hero-glass">
+            <div class="mini-stat">
+              <h3>8</h3>
+              <p>اختبارات</p>
+            </div>
+            <div class="mini-stat">
+              <h3>3D</h3>
+              <p>مخ تفاعلي</p>
+            </div>
+            <div class="mini-stat">
+              <h3>6</h3>
+              <p>أسئلة/اختبار</p>
+            </div>
+            <div class="mini-stat">
+              <h3>PDF</h3>
+              <p>طباعة</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2) بيانات المستخدم - Hidden, now using modal -->
+    <section id="user" class="section hidden">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-chip">بيانات المستخدم</span>
+          <h2>إنشاء حساب محلي أو تسجيل دخول</h2>
+          <p>الحساب والنتائج يتم حفظها على نفس الجهاز (LocalStorage).</p>
+        </div>
+
+        <div class="user-auth-grid">
+          <!-- Register -->
+          <div class="glass-card reveal">
+            <h3 style="margin-bottom: 12px">إنشاء حساب جديد</h3>
+
+            <div class="input-group">
+              <label>الاسم رباعي</label>
+              <input
+                type="text"
+                id="regFullName"
+                placeholder="مثال: محمد أحمد علي محمود"
+              />
+            </div>
+
+            <div class="input-group" style="margin-top: 14px">
+              <label>البريد الإلكتروني</label>
+              <input type="email" id="regEmail" placeholder="مثال: user@email.com" />
+            </div>
+
+            <div class="form-grid" style="margin-top: 14px">
+              <div class="input-group">
+                <label>العمر</label>
+                <input type="number" id="regAge" placeholder="مثال: 16" />
+              </div>
+
+              <div class="input-group">
+                <label>الجنس</label>
+                <select id="regGender">
+                  <option value="">اختر</option>
+                  <option>ذكر</option>
+                  <option>أنثى</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label>السنة الدراسية</label>
+                <input
+                  type="text"
+                  id="regStage"
+                  placeholder="مثال: الصف الثاني الثانوي"
+                />
+              </div>
+
+              <div class="input-group">
+                <label>كلمة المرور (6 أحرف أو أكثر)</label>
+                <input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" />
+              </div>
+            </div>
+
+            <div class="actions-center">
+              <button class="btn btn-primary" onclick="registerUser()">
+                إنشاء الحساب
+              </button>
+            </div>
+
+            <div
+              id="registerMsg"
+              class="empty-text"
+              style="margin-top: 10px"
+            ></div>
+          </div>
+
+          <!-- Login -->
+          <div class="glass-card reveal">
+            <h3 style="margin-bottom: 12px">لدي حساب بالفعل</h3>
+
+            <div class="input-group">
+              <label>البريد الإلكتروني</label>
+              <input
+                type="email"
+                id="loginEmail"
+                placeholder="أدخل بريدك الإلكتروني"
+              />
+            </div>
+
+            <div class="input-group" style="margin-top: 14px">
+              <label>كلمة المرور</label>
+              <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" />
+            </div>
+
+            <div class="actions-center">
+              <button class="btn btn-primary" onclick="loginUser()">
+                تسجيل دخول
+              </button>
+              <button class="btn btn-soft" onclick="logoutUser()">
+                تسجيل خروج
+              </button>
+            </div>
+
+            <div
+              id="loginMsg"
+              class="empty-text"
+              style="margin-top: 10px"
+            ></div>
+            <div id="welcomeBox" class="welcome-box hidden"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) الاختبارات -->
+    <section id="tests" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-chip">الاختبارات</span>
+          <h2>اختر اختبارك من المخ التفاعلي</h2>
+          <p>
+            اضغط على أي منطقة من المخ لاختيار الاختبار المناسب.
+            الاختبارات تتفلتر حسب العمر تلقائياً.
+          </p>
+        </div>
+
+        <div class="glass-card reveal">
+          <div class="brain3d-grid">
+            <div class="brain3d-wrap">
+              <canvas id="brainCanvas"></canvas>
+              <div class="brain3d-labels" id="brainLabels">
+                <div class="brain-label" data-region="binet" style="--label-color: #3ecbff;">
+                  <span class="label-dot" style="background: #3ecbff;"></span>
+                  <span class="label-text">بينيه</span>
+                </div>
+                <div class="brain-label" data-region="piaget" style="--label-color: #7c6dff;">
+                  <span class="label-dot" style="background: #7c6dff;"></span>
+                  <span class="label-text">بياجيه</span>
+                </div>
+                <div class="brain-label" data-region="terman" style="--label-color: #f4b942;">
+                  <span class="label-dot" style="background: #f4b942;"></span>
+                  <span class="label-text">تيرمان</span>
+                </div>
+                <div class="brain-label" data-region="wechsler" style="--label-color: #10b981;">
+                  <span class="label-dot" style="background: #10b981;"></span>
+                  <span class="label-text">وكسلر</span>
+                </div>
+                <div class="brain-label" data-region="spearman" style="--label-color: #2563eb;">
+                  <span class="label-dot" style="background: #2563eb;"></span>
+                  <span class="label-text">سبيرمان</span>
+                </div>
+                <div class="brain-label" data-region="cattell" style="--label-color: #ef4444;">
+                  <span class="label-dot" style="background: #ef4444;"></span>
+                  <span class="label-text">كاتل</span>
+                </div>
+                <div class="brain-label" data-region="sternberg" style="--label-color: #a855f7;">
+                  <span class="label-dot" style="background: #a855f7;"></span>
+                  <span class="label-text">ستيرنبرغ</span>
+                </div>
+                <div class="brain-label" data-region="gardner" style="--label-color: #f97316;">
+                  <span class="label-dot" style="background: #f97316;"></span>
+                  <span class="label-text">جاردنر</span>
+                </div>
+              </div>
+              <div class="brain3d-hint">
+                اسحب للتدوير • ضغط لاختيار المنطقة
+              </div>
+            </div>
+
+            <div>
+              <div
+                id="testsLockMsg"
+                class="welcome-box"
+                style="margin-bottom: 14px"
+              >
+                سجّل دخول أولاً لتفعيل الاختبارات.
+              </div>
+
+              <div id="selectedTestCard" class="selected-test-card hidden">
+                <div class="test-badge" id="selTestScientist">-</div>
+                <h3 id="selTestName">-</h3>
+                <p
+                  id="selTestMeasures"
+                  style="color: var(--muted); line-height: 1.9"
+                ></p>
+                <p style="color: var(--muted); margin-top: 8px">
+                  <strong>الفئة العمرية:</strong> <span id="selTestAge">-</span>
+                </p>
+                <div class="actions-center" style="margin-top: 14px">
+                  <button class="btn btn-primary" onclick="startSelectedTest()">
+                    ابدأ الاختبار
+                  </button>
+                </div>
+                <p class="empty-text" style="margin-top: 10px">
+                  تنبيه: اختبارات تعليمية مستوحاة من النظريات وليست تشخيصاً
+                  رسمياً.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="testArea" class="glass-card hidden" style="margin-top: 18px">
+            <div class="test-meta-grid">
+              <div class="meta-box">
+                <span>اسم الاختبار</span><strong id="testNameLabel">-</strong>
+              </div>
+              <div class="meta-box">
+                <span>ما الذي يقيسه؟</span
+                ><strong id="testMeasureLabel">-</strong>
+              </div>
+              <div class="meta-box">
+                <span>العالم</span><strong id="testScientistLabel">-</strong>
+              </div>
+              <div class="meta-box">
+                <span>الوقت المتبقي</span><strong id="timerText">05:00</strong>
+              </div>
+            </div>
+
+            <div class="timer-line"><div id="timerFill"></div></div>
+
+            <div class="progress-panel">
+              <div class="progress-top">
+                <span>تقدمك</span>
+                <span id="progressText">0%</span>
+              </div>
+              <div class="progress-line"><div id="progressFill"></div></div>
+            </div>
+
+            <div class="question-shell">
+              <div class="question-counter" id="questionCounter">
+                السؤال 1 من 6
+              </div>
+              <div id="singleQuestionContainer"></div>
+            </div>
+
+            <div class="actions-between">
+              <button
+                class="btn btn-soft"
+                id="prevBtn"
+                onclick="prevQuestion()"
+              >
+                السابق
+              </button>
+              <button
+                class="btn btn-primary"
+                id="nextBtn"
+                onclick="nextQuestion()"
+              >
+                التالي
+              </button>
+              <button
+                class="btn btn-gold hidden"
+                id="finishBtn"
+                onclick="submitTest()"
+              >
+                إنهاء الاختبار
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) العلماء -->
+    <section id="scientists" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-chip">العلماء</span>
+          <h2>العلماء المستخدمون في الاختبارات</h2>
+          <p>أمثلة مختصرة عن دور كل عالم في قياس القدرات العقلية.</p>
+        </div>
+
+        <div class="scientists-grid">
+          <div class="scientist-card reveal">
+            <img src="images/Robert Sternberg.jpeg" alt="Robert Sternberg" />
+            <div class="card-content">
+              <h3>Robert Sternberg</h3>
+              <p>الذكاء التحليلي والإبداعي والعملي.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Jean Piaget.jpeg" alt="Jean Piaget" />
+            <div class="card-content">
+              <h3>Jean Piaget</h3>
+              <p>النمو المعرفي ومراحل التفكير حسب العمر.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Raymond Cattell.jpeg" alt="Raymond Cattell" />
+            <div class="card-content">
+              <h3>Raymond Cattell</h3>
+              <p>الذكاء السائل: الاستنتاج والتجريد والأنماط.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Charles Spearman.jpg" alt="Charles Spearman" />
+            <div class="card-content">
+              <h3>Charles Spearman</h3>
+              <p>عامل الذكاء العام (g) والاستدلال.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Howard Gardner.jpeg" alt="Howard Gardner" />
+            <div class="card-content">
+              <h3>Howard Gardner</h3>
+              <p>الذكاءات المتعددة (نمط الذكاء الأقرب للمستخدم).</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/David Wechsler.jpg" alt="David Wechsler" />
+            <div class="card-content">
+              <h3>David Wechsler</h3>
+              <p>قدرات لفظية وذاكرة عاملة وفهم.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Lewis Terman.jpeg" alt="Lewis Terman" />
+            <div class="card-content">
+              <h3>Lewis Terman</h3>
+              <p>تطوير Stanford-Binet وقياس الذكاء العام.</p>
+            </div>
+          </div>
+          <div class="scientist-card reveal">
+            <img src="images/Alfred Binet.jpg" alt="Alfred Binet" />
+            <div class="card-content">
+              <h3>Alfred Binet</h3>
+              <p>اختبارات مبكرة لقياس القدرات العقلية للأطفال.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) النتيجة -->
+    <section id="result" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-chip">النتيجة</span>
+          <h2>نتيجة الاختبار + سجل اختباراتك</h2>
+          <p>النتائج محفوظة محلياً بالتاريخ ويمكن طباعتها كـ PDF.</p>
+        </div>
+
+        <div id="resultBox" class="glass-card reveal">
+          <p class="empty-text">
+            لا توجد نتيجة حالية. نفّذ اختباراً من قسم الاختبارات.
+          </p>
+        </div>
+
+        <div id="certificateBox" class="reveal"></div>
+
+        <div class="glass-card reveal" style="margin-top: 18px">
+          <div class="chart-title">
+            <h3>سجل الاختبارات السابقة</h3>
+            <p>يعرض اختبارات المستخدم الحالي بالتاريخ.</p>
+          </div>
+          <div id="historyList" class="admin-results-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) المطورين -->
+    <section id="developers" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-chip">المطورين</span>
+          <h2>فريق التطوير</h2>
+        </div>
+
+        <div class="developers-grid">
+          <div class="developer-mini-card reveal">
+            <img src="images/abdelaziz-ahmed.png" alt="عبد العزيز احمد محمود" />
+            <h3>عبد العزيز احمد محمود</h3>
+            <p>كلية التربية النوعية</p>
+            <p>قسم تكنولوجيا التعليم</p>
+            <p>جامعة مطروح</p>
+            <p>تاريخ الميلاد 5/8/2005</p>
+            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
+          </div>
+
+          <div class="developer-mini-card reveal">
+            <img src="images/ahmed-esmail.png" alt="احمد إسماعيل إبراهيم" />
+            <h3>احمد إسماعيل إبراهيم</h3>
+            <p>كلية التربية النوعية</p>
+            <p>قسم تكنولوجيا التعليم</p>
+            <p>جامعة مطروح</p>
+            <p>تاريخ الميلاد 5/8/2005</p>
+            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
+          </div>
+
+          <div class="developer-mini-card reveal">
+            <img src="images/hamed-magdy.png" alt="حامد مجدي حامد" />
+            <h3>حامد مجدي حامد</h3>
+            <p>كلية التربية النوعية</p>
+            <p>قسم تكنولوجيا التعليم</p>
+            <p>جامعة مطروح</p>
+            <p>تاريخ الميلاد 5/8/2005</p>
+            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
+          </div>
+        </div>
+
+        <div class="glass-card reveal" style="margin-top: 18px">
+          <div class="supervisor-grid">
+            <img src="images/mohmmed.png" alt="دكتور محمد جمال" />
+            <div>
+              <h3 style="margin-bottom: 8px">تحت إشراف</h3>
+              <h2 style="margin-bottom: 10px">دكتور محمد جمال</h2>
+              <p style="color: var(--muted); line-height: 2">
+                نتقدم بخالص الشكر والتقدير على الدعم العلمي والإشراف والتوجيه
+                المستمر لإنجاح هذا المشروع.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer-content">
+        <p>© 2026 - ذكاء تك</p>
+        <a href="#home">العودة للأعلى ↑</a>
+      </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal hidden">
+      <div class="modal-backdrop" onclick="closeAuthModal()"></div>
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeAuthModal()">×</button>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="auth-form">
+          <h3>تسجيل الدخول</h3>
+          <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="modalLoginEmail" placeholder="example@email.com" />
+          </div>
+          <div class="input-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="modalLoginPassword" placeholder="••••••" />
+          </div>
+          <p id="modalLoginMsg" class="form-msg"></p>
+          <button class="btn btn-primary btn-block" onclick="modalLogin()">دخول</button>
+          <p class="form-switch">
+            ليس لديك حساب؟ <a href="#" onclick="switchAuthForm('register')">سجّل الآن</a>
+          </p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" class="auth-form hidden">
+          <h3>إنشاء حساب جديد</h3>
+          <div class="input-group">
+            <label>الاسم الرباعي</label>
+            <input type="text" id="modalRegFullName" placeholder="محمد أحمد علي حسن" />
+          </div>
+          <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="modalRegEmail" placeholder="example@email.com" />
+          </div>
+          <div class="input-group">
+            <label>العمر</label>
+            <input type="number" id="modalRegAge" placeholder="25" min="6" max="90" />
+          </div>
+          <div class="input-group">
+            <label>الجنس</label>
+            <select id="modalRegGender">
+              <option value="">اختر</option>
+              <option value="male">ذكر</option>
+              <option value="female">أنثى</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>المرحلة الدراسية</label>
+            <select id="modalRegStage">
+              <option value="">اختر</option>
+              <option value="ابتدائي">ابتدائي</option>
+              <option value="إعدادي">إعدادي</option>
+              <option value="ثانوي">ثانوي</option>
+              <option value="جامعي">جامعي</option>
+              <option value="خريج">خريج</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="modalRegPassword" placeholder="6 أحرف على الأقل" />
+          </div>
+          <p id="modalRegMsg" class="form-msg"></p>
+          <button class="btn btn-primary btn-block" onclick="modalRegister()">تسجيل</button>
+          <p class="form-switch">
+            لديك حساب؟ <a href="#" onclick="switchAuthForm('login')">سجّل دخول</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

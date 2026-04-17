@@ -572,18 +572,168 @@ function copyText(text) {
 // Print Functions
 // =====================
 function printCertificate() {
-  // Add certificate-only class
-  document.body.classList.add('printing-certificate');
-  document.body.classList.remove('printing-result');
+  // Get the certificate HTML
+  const certBox = document.getElementById('certificateBox');
+  if (!certBox) return;
 
-  // Wait for class to apply then print
-  setTimeout(() => {
-    window.print();
-    // Remove class after printing
-    setTimeout(() => {
-      document.body.classList.remove('printing-certificate');
-    }, 100);
-  }, 100);
+  const certHTML = certBox.innerHTML;
+
+  // Create a new window with only the certificate
+  const printWindow = window.open('', '_blank', 'width=1200,height=800');
+
+  printWindow.document.write(`
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>شهادة إتمام - ذكاء تك</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .certificate {
+      width: 100%;
+      max-width: 1000px;
+      background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
+      border: 4px solid #f1c15d;
+      border-radius: 30px;
+      padding: 50px 60px;
+      text-align: center;
+      color: #5a3a00;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .certificate h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #8a5c00;
+    }
+
+    .certificate .name {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #8a5c00;
+      margin: 20px 0;
+    }
+
+    .certificate p {
+      font-size: 1.2rem;
+      margin: 12px 0;
+      line-height: 1.8;
+    }
+
+    .certificate strong {
+      color: #8a5c00;
+    }
+
+    .stamp {
+      width: 150px;
+      height: 150px;
+      margin: 30px auto 0;
+      border-radius: 50%;
+      border: 4px dashed #d62828;
+      display: grid;
+      place-items: center;
+      color: #d62828;
+      font-weight: 900;
+      font-size: 1.1rem;
+      transform: rotate(-10deg);
+    }
+
+    .actions-center {
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #f1c15d, #e6a93c);
+      color: #5a3a00;
+    }
+
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #e6a93c, #d4942a);
+    }
+
+    /* Print styles - full page */
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+
+      .certificate {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        border-radius: 0;
+        border: 4px solid #f1c15d;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        page-break-after: avoid;
+      }
+
+      .actions-center {
+        display: none;
+      }
+    }
+  </style>
+  <script>
+    /* Keyboard shortcut for print */
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        window.print();
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="certificate">
+    ${certHTML.replace(/onclick="[^"]*"/g, '').replace(/class="btn btn-gold"/, 'class="btn btn-gold" onclick="window.print()"').replace(/>فتح الشهادة للطباعة ↗</, '>طباعة 🖨️<')}
+  </div>
+  <script>
+    // Auto-focus and show print hint
+    window.onload = () => {
+      document.title = 'اضغط Ctrl+P للطباعة | ذكاء تك';
+    };
+  </script>
+</body>
+</html>
+  `);
+
+  printWindow.document.close();
 }
 
 function printResult() {
@@ -1935,7 +2085,7 @@ function renderResult(r) {
       <p>التاريخ: <strong>${new Date(r.createdAt).toLocaleDateString("ar-EG")}</strong></p>
       <div class="stamp">معتمد<br>تعليميًا</div>
       <div class="actions-center">
-        <button class="btn btn-gold" onclick="printCertificate()">طباعة الشهادة PDF</button>
+        <button class="btn btn-gold" onclick="printCertificate()">فتح الشهادة للطباعة ↗</button>
       </div>
     </div>
   `;

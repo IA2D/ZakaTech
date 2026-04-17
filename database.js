@@ -158,7 +158,10 @@ const TestResult = {
 
   async getByUserId(userId) {
     const result = await pool.query(
-      `SELECT * FROM test_results WHERE user_id = $1 ORDER BY created_at DESC`,
+      `SELECT tr.*, u.email, u.full_name, u.age, u.gender, u.stage
+       FROM test_results tr
+       JOIN users u ON tr.user_id = u.id
+       WHERE tr.user_id = $1 ORDER BY tr.created_at DESC`,
       [userId]
     );
     return result.rows.map(row => ({
@@ -169,7 +172,7 @@ const TestResult = {
 
   async getLatestByUserId(userId) {
     const result = await pool.query(
-      `SELECT tr.* , u.email, u.full_name, u.age, u.gender, u.stage
+      `SELECT tr.*, u.email, u.full_name, u.age, u.gender, u.stage
        FROM test_results tr
        JOIN users u ON tr.user_id = u.id
        WHERE tr.user_id = $1 ORDER BY tr.created_at DESC LIMIT 1`,

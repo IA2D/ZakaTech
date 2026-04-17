@@ -1592,22 +1592,21 @@ body.light-mode .brain3d-hint {
   /* ========================================
      CERTIFICATE ONLY PRINTING - LANDSCAPE
      ======================================== */
+  /* No body background - let certificate background show only */
   body.printing-certificate {
-    background: linear-gradient(135deg, #1a233c 0%, #07101c 100%) !important;
+    background: white !important;
+    margin: 0;
+    padding: 0;
   }
 
   body.light-mode.printing-certificate {
-    background: linear-gradient(135deg, #e6f0ff 0%, #eef5ff 100%) !important;
+    background: white !important;
   }
 
-  /* Landscape page for certificate */
-  body.printing-certificate {
-    size: landscape;
-  }
-
+  /* Portrait page for certificate - better fit */
   @page certificate {
-    size: A4 landscape;
-    margin: 10mm;
+    size: A4 portrait;
+    margin: 5mm; /* Minimal margins for maximum space */
   }
 
   body.printing-certificate {

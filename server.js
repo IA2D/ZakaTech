@@ -11,6 +11,9 @@ const { generateToken, authenticateToken, authenticateAdmin } = require('./middl
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy (required for rate-limit behind Vercel/proxy)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: {

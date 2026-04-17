@@ -26,7 +26,6 @@
 
     <!-- API Client for backend communication -->
     <script src="api-client.js"></script>
-
   </head>
 
   <body>
@@ -87,8 +86,12 @@
         <div class="nav-auth">
           <!-- Guest buttons -->
           <div id="navGuest" class="nav-auth-buttons">
-            <button class="btn btn-soft" onclick="openAuthModal('login')">دخول</button>
-            <button class="btn btn-primary" onclick="openAuthModal('register')">تسجيل</button>
+            <button class="btn btn-soft" onclick="openAuthModal('login')">
+              دخول
+            </button>
+            <button class="btn btn-primary" onclick="openAuthModal('register')">
+              تسجيل
+            </button>
           </div>
           <!-- Logged in user info -->
           <div id="navUser" class="nav-user-info hidden">
@@ -181,7 +184,11 @@
 
             <div class="input-group" style="margin-top: 14px">
               <label>البريد الإلكتروني</label>
-              <input type="email" id="regEmail" placeholder="مثال: user@email.com" />
+              <input
+                type="email"
+                id="regEmail"
+                placeholder="مثال: user@email.com"
+              />
             </div>
 
             <div class="form-grid" style="margin-top: 14px">
@@ -210,7 +217,11 @@
 
               <div class="input-group">
                 <label>كلمة المرور (6 أحرف أو أكثر)</label>
-                <input type="password" id="regPassword" placeholder="أدخل كلمة مرور قوية" />
+                <input
+                  type="password"
+                  id="regPassword"
+                  placeholder="أدخل كلمة مرور قوية"
+                />
               </div>
             </div>
 
@@ -242,7 +253,11 @@
 
             <div class="input-group" style="margin-top: 14px">
               <label>كلمة المرور</label>
-              <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" />
+              <input
+                type="password"
+                id="loginPassword"
+                placeholder="أدخل كلمة المرور"
+              />
             </div>
 
             <div class="actions-center">
@@ -272,8 +287,8 @@
           <span class="section-chip">الاختبارات</span>
           <h2>اختر اختبارك من المخ التفاعلي</h2>
           <p>
-            اضغط على أي منطقة من المخ لاختيار الاختبار المناسب.
-            الاختبارات تتفلتر حسب العمر تلقائياً.
+            اضغط على أي منطقة من المخ لاختيار الاختبار المناسب. الاختبارات
+            تتفلتر حسب العمر تلقائياً.
           </p>
         </div>
 
@@ -282,42 +297,72 @@
             <div class="brain3d-wrap">
               <canvas id="brainCanvas"></canvas>
               <div class="brain3d-labels" id="brainLabels">
-                <div class="brain-label" data-region="binet" style="--label-color: #3ecbff;">
-                  <span class="label-dot" style="background: #3ecbff;"></span>
+                <div
+                  class="brain-label"
+                  data-region="binet"
+                  style="--label-color: #3ecbff"
+                >
+                  <span class="label-dot" style="background: #3ecbff"></span>
                   <span class="label-text">بينيه</span>
                 </div>
-                <div class="brain-label" data-region="piaget" style="--label-color: #7c6dff;">
-                  <span class="label-dot" style="background: #7c6dff;"></span>
+                <div
+                  class="brain-label"
+                  data-region="piaget"
+                  style="--label-color: #7c6dff"
+                >
+                  <span class="label-dot" style="background: #7c6dff"></span>
                   <span class="label-text">بياجيه</span>
                 </div>
-                <div class="brain-label" data-region="terman" style="--label-color: #f4b942;">
-                  <span class="label-dot" style="background: #f4b942;"></span>
+                <div
+                  class="brain-label"
+                  data-region="terman"
+                  style="--label-color: #f4b942"
+                >
+                  <span class="label-dot" style="background: #f4b942"></span>
                   <span class="label-text">تيرمان</span>
                 </div>
-                <div class="brain-label" data-region="wechsler" style="--label-color: #10b981;">
-                  <span class="label-dot" style="background: #10b981;"></span>
+                <div
+                  class="brain-label"
+                  data-region="wechsler"
+                  style="--label-color: #10b981"
+                >
+                  <span class="label-dot" style="background: #10b981"></span>
                   <span class="label-text">وكسلر</span>
                 </div>
-                <div class="brain-label" data-region="spearman" style="--label-color: #2563eb;">
-                  <span class="label-dot" style="background: #2563eb;"></span>
+                <div
+                  class="brain-label"
+                  data-region="spearman"
+                  style="--label-color: #2563eb"
+                >
+                  <span class="label-dot" style="background: #2563eb"></span>
                   <span class="label-text">سبيرمان</span>
                 </div>
-                <div class="brain-label" data-region="cattell" style="--label-color: #ef4444;">
-                  <span class="label-dot" style="background: #ef4444;"></span>
+                <div
+                  class="brain-label"
+                  data-region="cattell"
+                  style="--label-color: #ef4444"
+                >
+                  <span class="label-dot" style="background: #ef4444"></span>
                   <span class="label-text">كاتل</span>
                 </div>
-                <div class="brain-label" data-region="sternberg" style="--label-color: #a855f7;">
-                  <span class="label-dot" style="background: #a855f7;"></span>
+                <div
+                  class="brain-label"
+                  data-region="sternberg"
+                  style="--label-color: #a855f7"
+                >
+                  <span class="label-dot" style="background: #a855f7"></span>
                   <span class="label-text">ستيرنبرغ</span>
                 </div>
-                <div class="brain-label" data-region="gardner" style="--label-color: #f97316;">
-                  <span class="label-dot" style="background: #f97316;"></span>
+                <div
+                  class="brain-label"
+                  data-region="gardner"
+                  style="--label-color: #f97316"
+                >
+                  <span class="label-dot" style="background: #f97316"></span>
                   <span class="label-text">جاردنر</span>
                 </div>
               </div>
-              <div class="brain3d-hint">
-                اسحب للتدوير • ضغط لاختيار المنطقة
-              </div>
+              <div class="brain3d-hint">اسحب للتدوير • ضغط لاختيار المنطقة</div>
             </div>
 
             <div>
@@ -345,8 +390,7 @@
                   </button>
                 </div>
                 <p class="empty-text" style="margin-top: 10px">
-                  تنبيه: اختبارات تعليمية مستوحاة من النظريات وليست تشخيصاً
-                  رسمياً.
+                  تنبيه: اختبارات تعليمية مستوحاة من النظريات
                 </p>
               </div>
             </div>
@@ -585,16 +629,27 @@
           <h3>تسجيل الدخول</h3>
           <div class="input-group">
             <label>البريد الإلكتروني</label>
-            <input type="email" id="modalLoginEmail" placeholder="example@email.com" />
+            <input
+              type="email"
+              id="modalLoginEmail"
+              placeholder="example@email.com"
+            />
           </div>
           <div class="input-group">
             <label>كلمة المرور</label>
-            <input type="password" id="modalLoginPassword" placeholder="••••••" />
+            <input
+              type="password"
+              id="modalLoginPassword"
+              placeholder="••••••"
+            />
           </div>
           <p id="modalLoginMsg" class="form-msg"></p>
-          <button class="btn btn-primary btn-block" onclick="modalLogin()">دخول</button>
+          <button class="btn btn-primary btn-block" onclick="modalLogin()">
+            دخول
+          </button>
           <p class="form-switch">
-            ليس لديك حساب؟ <a href="#" onclick="switchAuthForm('register')">سجّل الآن</a>
+            ليس لديك حساب؟
+            <a href="#" onclick="switchAuthForm('register')">سجّل الآن</a>
           </p>
         </div>
 
@@ -603,15 +658,29 @@
           <h3>إنشاء حساب جديد</h3>
           <div class="input-group">
             <label>الاسم الرباعي</label>
-            <input type="text" id="modalRegFullName" placeholder="محمد أحمد علي حسن" />
+            <input
+              type="text"
+              id="modalRegFullName"
+              placeholder="محمد أحمد علي حسن"
+            />
           </div>
           <div class="input-group">
             <label>البريد الإلكتروني</label>
-            <input type="email" id="modalRegEmail" placeholder="example@email.com" />
+            <input
+              type="email"
+              id="modalRegEmail"
+              placeholder="example@email.com"
+            />
           </div>
           <div class="input-group">
             <label>العمر</label>
-            <input type="number" id="modalRegAge" placeholder="25" min="6" max="90" />
+            <input
+              type="number"
+              id="modalRegAge"
+              placeholder="25"
+              min="6"
+              max="90"
+            />
           </div>
           <div class="input-group">
             <label>الجنس</label>
@@ -634,12 +703,19 @@
           </div>
           <div class="input-group">
             <label>كلمة المرور</label>
-            <input type="password" id="modalRegPassword" placeholder="6 أحرف على الأقل" />
+            <input
+              type="password"
+              id="modalRegPassword"
+              placeholder="6 أحرف على الأقل"
+            />
           </div>
           <p id="modalRegMsg" class="form-msg"></p>
-          <button class="btn btn-primary btn-block" onclick="modalRegister()">تسجيل</button>
+          <button class="btn btn-primary btn-block" onclick="modalRegister()">
+            تسجيل
+          </button>
           <p class="form-switch">
-            لديك حساب؟ <a href="#" onclick="switchAuthForm('login')">سجّل دخول</a>
+            لديك حساب؟
+            <a href="#" onclick="switchAuthForm('login')">سجّل دخول</a>
           </p>
         </div>
       </div>

@@ -21,6 +21,33 @@ let timer = null;
 let timeLeft = 300;
 
 // =====================
+// 3D Brain Constants
+// =====================
+// Region colors mapping - darker, less vibrant
+const regionColors = {
+  "binet": 0x2a7a99,    // Darker cyan
+  "piaget": 0x5a4fb5,   // Darker purple
+  "terman": 0xc99120,   // Darker gold
+  "wechsler": 0x0d8a5f, // Darker green
+  "spearman": 0x1a4191, // Darker blue
+  "cattell": 0xb91c1c,  // Darker red
+  "sternberg": 0x7c3aed,// Darker violet
+  "gardner": 0xc2410c   // Darker orange
+};
+
+// Region positions for camera targeting (normalized coordinates)
+const regionTargets = {
+  "binet": { x: -0.8, y: 1.0, z: 0.5, camX: -2, camY: 2, camZ: 4 },
+  "piaget": { x: -0.5, y: 0.3, z: 0.8, camX: -1.5, camY: 1, camZ: 4.5 },
+  "terman": { x: 0.8, y: 1.0, z: 0.5, camX: 2, camY: 2, camZ: 4 },
+  "wechsler": { x: 0.5, y: 0.3, z: 0.8, camX: 1.5, camY: 1, camZ: 4.5 },
+  "spearman": { x: -0.9, y: -0.3, z: 0.2, camX: -2, camY: -0.5, camZ: 4 },
+  "cattell": { x: -0.6, y: -0.8, z: 0.0, camX: -1.5, camY: -1.5, camZ: 4 },
+  "sternberg": { x: 0.9, y: -0.3, z: 0.2, camX: 2, camY: -0.5, camZ: 4 },
+  "gardner": { x: 0.6, y: -0.8, z: 0.0, camX: 1.5, camY: -1.5, camZ: 4 }
+};
+
+// =====================
 // Tests (8 علماء) - 6 أسئلة لكل اختبار
 // تعليمية/مستوحاة وليست اختبارات رسمية
 // =====================
@@ -1060,33 +1087,9 @@ function refreshSessionUI() {
 let scene, camera, renderer, controls, raycaster;
 let brainModel = null;
 let brainRegions = [];
-let pointer = new THREE.Vector2();
+let pointer = null; // Initialized inside initBrain3D when THREE is available
 let hoveredRegion = null;
 let selectedRegion = null;
-
-// Region colors mapping - darker, less vibrant
-const regionColors = {
-  "binet": 0x2a7a99,    // Darker cyan
-  "piaget": 0x5a4fb5,   // Darker purple
-  "terman": 0xc99120,   // Darker gold
-  "wechsler": 0x0d8a5f, // Darker green
-  "spearman": 0x1a4191, // Darker blue
-  "cattell": 0xb91c1c,  // Darker red
-  "sternberg": 0x7c3aed,// Darker violet
-  "gardner": 0xc2410c   // Darker orange
-};
-
-// Region positions for camera targeting (normalized coordinates)
-const regionTargets = {
-  "binet": { x: -0.8, y: 1.0, z: 0.5, camX: -2, camY: 2, camZ: 4 },
-  "piaget": { x: -0.5, y: 0.3, z: 0.8, camX: -1.5, camY: 1, camZ: 4.5 },
-  "terman": { x: 0.8, y: 1.0, z: 0.5, camX: 2, camY: 2, camZ: 4 },
-  "wechsler": { x: 0.5, y: 0.3, z: 0.8, camX: 1.5, camY: 1, camZ: 4.5 },
-  "spearman": { x: -0.9, y: -0.3, z: 0.2, camX: -2, camY: -0.5, camZ: 4 },
-  "cattell": { x: -0.6, y: -0.8, z: 0.0, camX: -1.5, camY: -1.5, camZ: 4 },
-  "sternberg": { x: 0.9, y: -0.3, z: 0.2, camX: 2, camY: -0.5, camZ: 4 },
-  "gardner": { x: 0.6, y: -0.8, z: 0.0, camX: 1.5, camY: -1.5, camZ: 4 }
-};
 
 let brain3DInitAttempts = 0;
 const MAX_BRAIN_INIT_ATTEMPTS = 10;
@@ -1158,8 +1161,9 @@ function initBrain3D() {
     controls.minDistance = 3;
     controls.maxDistance = 8;
 
-    // Raycaster
+    // Raycaster and pointer (initialize here when THREE is available)
     raycaster = new THREE.Raycaster();
+    pointer = new THREE.Vector2();
 
     // Darker, moodier lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
@@ -1243,11 +1247,14 @@ function initBrain3D() {
         updateBrainAvailability();
       },
       function (xhr) {
-        const percent = (xhr.loaded / xhr.total * 100);
-        console.log(percent + '% loaded');
+        // Handle case where total is 0 (avoid Infinity)
+        const percent = xhr.total > 0 ? (xhr.loaded / xhr.total * 100) : 0;
+        if (xhr.total > 0) {
+          console.log(Math.round(percent) + '% loaded');
+        }
         
         // Show loading progress on canvas for mobile
-        if (isMobile && percent < 100) {
+        if (isMobile && xhr.total > 0 && percent < 100) {
           const ctx = canvas.getContext('2d');
           if (ctx) {
             ctx.fillStyle = '#1a233c';
@@ -1311,6 +1318,8 @@ function initBrain3D() {
     }, { passive: true });
 
     function onMouseMove(event) {
+      if (!pointer) return; // Guard for when THREE isn't loaded yet
+      
       const rect = canvas.getBoundingClientRect();
       pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;

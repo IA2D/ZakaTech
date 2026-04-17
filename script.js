@@ -1088,9 +1088,34 @@ const regionTargets = {
   "gardner": { x: 0.6, y: -0.8, z: 0.0, camX: 1.5, camY: -1.5, camZ: 4 }
 };
 
+let brain3DInitAttempts = 0;
+const MAX_BRAIN_INIT_ATTEMPTS = 10;
+
 function initBrain3D() {
   const canvas = document.getElementById("brainCanvas");
-  if (!canvas || !window.THREE || !window.THREE.GLTFLoader) return;
+  if (!canvas) return;
+  
+  // Retry if Three.js not loaded yet (deferred scripts)
+  if (!window.THREE || !window.THREE.GLTFLoader) {
+    brain3DInitAttempts++;
+    if (brain3DInitAttempts < MAX_BRAIN_INIT_ATTEMPTS) {
+      console.log('Three.js not loaded yet, retrying... (' + brain3DInitAttempts + '/' + MAX_BRAIN_INIT_ATTEMPTS + ')');
+      setTimeout(initBrain3D, 500);
+    } else {
+      console.error('Three.js failed to load after ' + MAX_BRAIN_INIT_ATTEMPTS + ' attempts');
+      // Show fallback on canvas
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#1a233c';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#f1c15d';
+        ctx.font = 'bold 14px Cairo';
+        ctx.textAlign = 'center';
+        ctx.fillText('تحميل النموذج 3D غير متاح حالياً', canvas.width/2, canvas.height/2);
+      }
+    }
+    return;
+  }
 
   try {
     // Scene setup
@@ -1174,8 +1199,11 @@ function initBrain3D() {
         // Traverse and setup materials/interactions
         brainModel.traverse((child) => {
           if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
+            // Skip complex materials on mobile
+            if (!isMobile) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
 
             // Store original material for hover effects
             child.userData.originalMaterial = child.material.clone();
@@ -1185,6 +1213,12 @@ function initBrain3D() {
               child.material = child.material.clone();
               child.material.emissive = new THREE.Color(0x000000);
               child.material.emissiveIntensity = 0;
+              
+              // Simplify material on mobile
+              if (isMobile) {
+                child.material.roughness = 0.8;
+                child.material.metalness = 0.1;
+              }
             }
 
             // Check if mesh name matches any region
@@ -1209,10 +1243,40 @@ function initBrain3D() {
         updateBrainAvailability();
       },
       function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        const percent = (xhr.loaded / xhr.total * 100);
+        console.log(percent + '% loaded');
+        
+        // Show loading progress on canvas for mobile
+        if (isMobile && percent < 100) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#1a233c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#3ecbff';
+            ctx.font = '14px Cairo';
+            ctx.textAlign = 'center';
+            ctx.fillText('جاري تحميل النموذج 3D... ' + Math.round(percent) + '%', canvas.width/2, canvas.height/2);
+          }
+        }
       },
       function (error) {
         console.error('Error loading model:', error);
+        
+        // Show fallback message on mobile
+        if (isMobile) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#1a233c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#f1c15d';
+            ctx.font = 'bold 16px Cairo';
+            ctx.textAlign = 'center';
+            ctx.fillText('تعذر تحميل النموذج ثلاثي الأبعاد', canvas.width/2, canvas.height/2 - 20);
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Cairo';
+            ctx.fillText('يمكنك اختيار الاختبار من القائمة أدناه', canvas.width/2, canvas.height/2 + 10);
+          }
+        }
       }
     );
 

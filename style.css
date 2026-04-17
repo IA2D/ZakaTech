@@ -1990,7 +1990,8 @@ body.light-mode .brain3d-hint {
 .meaning-table {
   width: 100%;
   border-collapse: collapse;
-  overflow: hidden;
+  overflow-x: auto;
+  display: block;
   border-radius: 16px;
   border: 1px solid var(--line);
   font-size: 0.9rem;
@@ -1998,15 +1999,19 @@ body.light-mode .brain3d-hint {
 
 @media (max-width: 768px) {
   .meaning-table {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     border-radius: 12px;
+    overflow-x: auto;
+    display: block;
   }
   
   .meaning-table th,
   .meaning-table td {
-    padding: 8px 10px;
+    padding: 6px 8px;
     word-wrap: break-word;
     white-space: normal;
+    min-width: unset;
+    max-width: 120px;
   }
 }
 

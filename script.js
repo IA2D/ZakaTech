@@ -2037,7 +2037,7 @@ async function openResultFromHistory(resultId) {
       total: r.total,
       percentage: r.percentage,
       level: r.level,
-      details: r.details ? JSON.parse(r.details) : null,
+      details: r.details ? (typeof r.details === 'string' ? JSON.parse(r.details) : r.details) : null,
       createdAt: r.created_at
     };
     renderResult(resultData);

@@ -1634,60 +1634,47 @@ body.light-mode .brain3d-hint {
 
   /* Show certificate box full screen */
   body.printing-certificate #result {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    padding: 20px !important;
-    margin: 0 !important;
-    background: linear-gradient(135deg, #1a233c 0%, #07101c 100%) !important;
-    -webkit-print-color-adjust: exact !important;
+    display: block !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: white !important;
     print-color-adjust: exact !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   body.light-mode.printing-certificate #result {
-    background: linear-gradient(135deg, #e6f0ff 0%, #eef5ff 100%) !important;
+    background: white !important;
   }
 
   body.printing-certificate #certificateBox {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
+    display: block !important;
     width: 100% !important;
     height: 100% !important;
     padding: 20px !important;
-    margin: 0 !important;
+    box-sizing: border-box !important;
     background: transparent !important;
   }
 
   body.printing-certificate .certificate {
     display: block !important;
-    position: relative !important;
     width: 100% !important;
-    max-width: 1000px !important;
-    margin: 0 auto !important;
-    padding: 40px 60px !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
-    border: 4px double #f1c15d !important;
-    border-radius: 20px !important;
-    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%) !important;
-    backdrop-filter: blur(10px) !important;
-    page-break-inside: avoid !important;
-    page-break-after: avoid !important;
-    -webkit-print-color-adjust: exact !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 50px !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%) !important;
+    border: 3px solid #f1c15d !important;
+    border-radius: 30px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
     print-color-adjust: exact !important;
+    overflow: hidden !important;
+    position: relative !important;
   }
 
   body.light-mode.printing-certificate .certificate {
-    background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(250,250,250,0.98) 100%) !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+    background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
   }
 
   /* Hide buttons in certificate */

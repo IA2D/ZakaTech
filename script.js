@@ -605,9 +605,12 @@ function printCertificate() {
       padding: 20px;
     }
 
-    .certificate {
+    .cert-wrapper {
       width: 100%;
       max-width: 1000px;
+    }
+
+    .certificate {
       background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
       border: 4px solid #f1c15d;
       border-radius: 30px;
@@ -690,18 +693,29 @@ function printCertificate() {
         margin: 0;
       }
 
-      .certificate {
+      .cert-wrapper {
         width: 100vw;
         height: 100vh;
         max-width: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .certificate {
+        width: 100%;
+        height: 100%;
+        max-width: none;
         border-radius: 0;
-        border: 4px solid #f1c15d;
+        /* Border is inherited from regular styles */
         box-shadow: none;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         page-break-after: avoid;
+        margin: 0;
       }
 
       .actions-center {
@@ -720,7 +734,7 @@ function printCertificate() {
   </script>
 </head>
 <body>
-  <div class="certificate">
+  <div class="cert-wrapper">
     ${certHTML.replace(/onclick="[^"]*"/g, '').replace(/class="btn btn-gold"/, 'class="btn btn-gold" onclick="window.print()"').replace(/>فتح الشهادة للطباعة ↗</, '>طباعة 🖨️<')}
   </div>
   <script>

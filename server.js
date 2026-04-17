@@ -41,9 +41,11 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Determine base path for files (Vercel: /api, Local: root)
+// Determine base path for files
+// On Vercel, __dirname is /var/task/api, so go up to /var/task
+// On local, __dirname is project root
 const basePath = process.env.VERCEL === '1'
-  ? path.join(__dirname, '..')
+  ? path.join(__dirname, '..', '..')  // /var/task/api -> /var/task
   : __dirname;
 
 // Static files - serve BEFORE rate limiting
@@ -337,6 +339,15 @@ app.get('/', (req, res) => {
 // Serve index.html for admin page
 app.get('/admin.html', (req, res) => {
   res.sendFile(path.join(basePath, 'admin.html'));
+});
+
+// Favicon route - return 404 if not found (avoid errors in logs)
+app.get('/favicon.ico', (req, res) => {
+  res.status(404).send('Not found');
+});
+
+app.get('/favicon.png', (req, res) => {
+  res.status(404).send('Not found');
 });
 
 // Catch-all route: serve index.html for any non-API route (SPA support)

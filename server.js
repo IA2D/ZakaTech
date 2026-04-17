@@ -38,12 +38,13 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Static files - serve BEFORE rate limiting
-// On Vercel, __dirname is /api, so go up one level
-const staticPath = process.env.VERCEL === '1'
+// Determine base path for files (Vercel: /api, Local: root)
+const basePath = process.env.VERCEL === '1'
   ? path.join(__dirname, '..')
   : __dirname;
-app.use(express.static(staticPath));
+
+// Static files - serve BEFORE rate limiting
+app.use(express.static(basePath));
 
 // Rate limiting - only for API routes
 const apiLimiter = rateLimit({
@@ -327,12 +328,22 @@ app.get('/api/health', (req, res) => {
 
 // Serve index.html for root path
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(basePath, 'index.html'));
 });
 
 // Serve index.html for admin page
 app.get('/admin.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+  res.sendFile(path.join(basePath, 'admin.html'));
+});
+
+// Catch-all route: serve index.html for any non-API route (SPA support)
+// This handles client-side routing for single page application
+app.get('*', (req, res) => {
+  // Don't interfere with API routes
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  res.sendFile(path.join(basePath, 'index.html'));
 });
 
 // ====================

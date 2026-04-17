@@ -939,16 +939,19 @@ function initBrain3D() {
     camera.position.set(0, 0, 5);
 
     // Renderer
+    // Detect mobile for performance optimization
+    const isMobile = /Android|iPhone|iPad|iPod|webOS/i.test(navigator.userAgent) || window.innerWidth < 768;
+
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !isMobile,  // Disable antialias on mobile
       alpha: true,
-      powerPreference: "high-performance"
+      powerPreference: isMobile ? "low-power" : "high-performance"
     });
     renderer.setSize(parent.clientWidth, parent.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = !isMobile;  // Disable shadows on mobile
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -975,7 +978,7 @@ function initBrain3D() {
 
     const keyLight = new THREE.DirectionalLight(0xa0a0a0, 0.8);
     keyLight.position.set(5, 5, 5);
-    keyLight.castShadow = true;
+    keyLight.castShadow = !isMobile;  // No shadows on mobile
     scene.add(keyLight);
 
     const fillLight = new THREE.DirectionalLight(0x505060, 0.3);

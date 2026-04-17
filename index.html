@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="popup-styles.css" />
 
-    <!-- Three.js for exceptional 3D brain visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- Three.js for 3D brain visualization (deferred for faster load) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <!-- API Client for backend communication -->
     <script src="api-client.js"></script>
@@ -469,56 +469,56 @@
 
         <div class="scientists-grid">
           <div class="scientist-card reveal">
-            <img src="images/Robert Sternberg.jpeg" alt="Robert Sternberg" />
+            <img loading="lazy" src="images/Robert Sternberg.jpeg" alt="Robert Sternberg" />
             <div class="card-content">
               <h3>Robert Sternberg</h3>
               <p>الذكاء التحليلي والإبداعي والعملي.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Jean Piaget.jpeg" alt="Jean Piaget" />
+            <img loading="lazy" src="images/Jean Piaget.jpeg" alt="Jean Piaget" />
             <div class="card-content">
               <h3>Jean Piaget</h3>
               <p>النمو المعرفي ومراحل التفكير حسب العمر.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Raymond Cattell.jpeg" alt="Raymond Cattell" />
+            <img loading="lazy" src="images/Raymond Cattell.jpeg" alt="Raymond Cattell" />
             <div class="card-content">
               <h3>Raymond Cattell</h3>
               <p>الذكاء السائل: الاستنتاج والتجريد والأنماط.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Charles Spearman.jpg" alt="Charles Spearman" />
+            <img loading="lazy" src="images/Charles Spearman.jpg" alt="Charles Spearman" />
             <div class="card-content">
               <h3>Charles Spearman</h3>
               <p>عامل الذكاء العام (g) والاستدلال.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Howard Gardner.jpeg" alt="Howard Gardner" />
+            <img loading="lazy" src="images/Howard Gardner.jpeg" alt="Howard Gardner" />
             <div class="card-content">
               <h3>Howard Gardner</h3>
               <p>الذكاءات المتعددة (نمط الذكاء الأقرب للمستخدم).</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/David Wechsler.jpg" alt="David Wechsler" />
+            <img loading="lazy" src="images/David Wechsler.jpg" alt="David Wechsler" />
             <div class="card-content">
               <h3>David Wechsler</h3>
               <p>قدرات لفظية وذاكرة عاملة وفهم.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Lewis Terman.jpeg" alt="Lewis Terman" />
+            <img loading="lazy" src="images/Lewis Terman.jpeg" alt="Lewis Terman" />
             <div class="card-content">
               <h3>Lewis Terman</h3>
               <p>تطوير Stanford-Binet وقياس الذكاء العام.</p>
             </div>
           </div>
           <div class="scientist-card reveal">
-            <img src="images/Alfred Binet.jpg" alt="Alfred Binet" />
+            <img loading="lazy" src="images/Alfred Binet.jpg" alt="Alfred Binet" />
             <div class="card-content">
               <h3>Alfred Binet</h3>
               <p>اختبارات مبكرة لقياس القدرات العقلية للأطفال.</p>
@@ -565,39 +565,36 @@
 
         <div class="developers-grid">
           <div class="developer-mini-card reveal">
-            <img src="images/abdelaziz-ahmed.png" alt="عبد العزيز احمد محمود" />
+            <img loading="lazy" src="images/abdelaziz-ahmed.png" alt="عبد العزيز احمد محمود" />
             <h3>عبد العزيز احمد محمود</h3>
             <p>كلية التربية النوعية</p>
             <p>قسم تكنولوجيا التعليم</p>
             <p>جامعة مطروح</p>
             <p>تاريخ الميلاد 5/8/2005</p>
-            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
           </div>
 
           <div class="developer-mini-card reveal">
-            <img src="images/ahmed-esmail.png" alt="احمد إسماعيل إبراهيم" />
+            <img loading="lazy" src="images/ahmed-esmail.png" alt="احمد إسماعيل إبراهيم" />
             <h3>احمد إسماعيل إبراهيم</h3>
             <p>كلية التربية النوعية</p>
             <p>قسم تكنولوجيا التعليم</p>
             <p>جامعة مطروح</p>
             <p>تاريخ الميلاد 5/8/2005</p>
-            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
           </div>
 
           <div class="developer-mini-card reveal">
-            <img src="images/hamed-magdy.png" alt="حامد مجدي حامد" />
+            <img loading="lazy" src="images/hamed-magdy.png" alt="حامد مجدي حامد" />
             <h3>حامد مجدي حامد</h3>
             <p>كلية التربية النوعية</p>
             <p>قسم تكنولوجيا التعليم</p>
             <p>جامعة مطروح</p>
             <p>تاريخ الميلاد 5/8/2005</p>
-            <p>يعيش في جمهورية مصر العربية محافظة مرسى مطروح</p>
           </div>
         </div>
 
         <div class="glass-card reveal" style="margin-top: 18px">
           <div class="supervisor-grid">
-            <img src="images/mohmmed.png" alt="دكتور محمد جمال" />
+            <img loading="lazy" src="images/mohmmed.png" alt="دكتور محمد جمال" />
             <div>
               <h3 style="margin-bottom: 8px">تحت إشراف</h3>
               <h2 style="margin-bottom: 10px">دكتور محمد جمال</h2>

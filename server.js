@@ -341,11 +341,13 @@ app.use((err, req, res, next) => {
 });
 
 // ====================
-// START SERVER
+// START SERVER (only for local dev)
 // ====================
 
-app.listen(PORT, () => {
-  console.log(`
+// Only listen if not in Vercel serverless environment
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`
 ========================================
   Zeka Tech Server Running
 ========================================
@@ -360,6 +362,7 @@ app.listen(PORT, () => {
   Change admin password in production!
 ========================================
   `);
-});
+  });
+}
 
 module.exports = app;

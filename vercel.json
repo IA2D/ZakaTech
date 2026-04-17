@@ -1,38 +1,17 @@
 {
   "version": 2,
-  "name": "zeka-tech",
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "server.js"
+      "destination": "/api/server"
     },
     {
       "source": "/admin.html",
-      "destination": "server.js"
+      "destination": "/api/server"
     },
     {
       "source": "/",
-      "destination": "server.js"
+      "destination": "/api/server"
     }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        }
-      ]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

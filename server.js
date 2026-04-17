@@ -39,9 +39,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Static files - serve BEFORE rate limiting
-// On Vercel, __dirname is api/, so we need to go up one level for static files
-const staticPath = process.env.VERCEL === '1' 
-  ? path.join(__dirname, '..') 
+// On Vercel, __dirname is /api, so go up one level
+const staticPath = process.env.VERCEL === '1'
+  ? path.join(__dirname, '..')
   : __dirname;
 app.use(express.static(staticPath));
 

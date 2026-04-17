@@ -1605,7 +1605,7 @@ body.light-mode .brain3d-hint {
 
   /* Portrait page for certificate - better fit */
   @page certificate {
-    size: A4 portrait;
+    size: A4 landscape;
     margin: 5mm; /* Minimal margins for maximum space */
   }
 

@@ -42,7 +42,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Determine base path for files
-// On Vercel, server.js is at /var/task/server.js so __dirname = /var/task
+// With Vercel builds, all included files are in /var/task/ (same as __dirname)
 // On local, __dirname is project root
 const basePath = __dirname;
 

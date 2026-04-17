@@ -318,6 +318,20 @@ app.get('/api/health', (req, res) => {
 });
 
 // ====================
+// SERVE FRONTEND (for Vercel and root path)
+// ====================
+
+// Serve index.html for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve index.html for admin page
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// ====================
 // ERROR HANDLING
 // ====================
 

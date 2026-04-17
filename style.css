@@ -1593,6 +1593,7 @@ body.light-mode .brain3d-hint {
     min-height: auto !important;
   }
 
+  
   /* Hide all UI elements by default */
   .navbar,
   .bg-shape,

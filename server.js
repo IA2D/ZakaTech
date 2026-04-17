@@ -42,11 +42,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Determine base path for files
-// On Vercel, __dirname is /var/task/api, so go up to /var/task
+// On Vercel, server.js is at /var/task/server.js so __dirname = /var/task
 // On local, __dirname is project root
-const basePath = process.env.VERCEL === '1'
-  ? path.join(__dirname, '..', '..')  // /var/task/api -> /var/task
-  : __dirname;
+const basePath = __dirname;
 
 // Static files - serve BEFORE rate limiting
 app.use(express.static(basePath));

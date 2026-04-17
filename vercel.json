@@ -15,6 +15,7 @@
           "admin.js",
           "images/**",
           "sounds/**",
+          "model/**",
           "database.js",
           "middleware/**"
         ]

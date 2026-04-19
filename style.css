@@ -200,6 +200,12 @@ body.light-mode .navbar {
   cursor: pointer;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Navbar Auth */
 .nav-auth {
   display: flex;

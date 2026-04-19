@@ -1,7 +1,7 @@
 // =====================
 // Maintenance Mode
 // =====================
-const MAINTENANCE_MODE = true; // Set to true to enable maintenance redirect
+const MAINTENANCE_MODE = false; // Set to true to enable maintenance redirect
 
 if (MAINTENANCE_MODE && !window.location.pathname.includes("maintenance.html")) {
   window.location.href = "maintenance.html";

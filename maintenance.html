@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحت الصيانة | ذكاء تك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070a12;
+      --bg2: #0b1220;
+      --text: #e7ecf5;
+      --muted: #9fb0c7;
+      --secondary: #3ecbff;
+      --surface: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.08);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Cairo', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--bg), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .maintenance-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 60px 40px;
+      max-width: 480px;
+      width: 100%;
+      backdrop-filter: blur(20px);
+    }
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--secondary), #7c6dff);
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    .brand {
+      margin-top: 32px;
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+    .brand b {
+      color: var(--secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="maintenance-card">
+    <div class="icon">🔧</div>
+    <h1>تحت الصيانة</h1>
+    <p>نحن نعمل على تحسين المنصة لنقدم لك تجربة أفضل.<br>سنعود قريباً إن شاء الله.</p>
+    <div class="brand">ذكاء <b>تك</b></div>
+  </div>
+</body>
+</html>

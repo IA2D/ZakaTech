@@ -16,6 +16,13 @@
     />
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Maintenance Mode Check -->
+    <script>
+      const MAINTENANCE_MODE = true; // Set to true to enable maintenance redirect
+      if (MAINTENANCE_MODE && !window.location.pathname.includes("maintenance.html")) {
+        window.location.href = "maintenance.html";
+      }
+    </script>
     <!-- API Client for backend communication -->
     <script src="api-client.js"></script>
   </head>

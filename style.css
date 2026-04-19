@@ -1737,6 +1737,26 @@ body.light-mode .brain3d-hint {
   margin-bottom: 4px;
 }
 
+.dev-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.dev-row .label {
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.dev-row.job {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-weight: 700;
+}
+
 .supervisor-grid {
   display: grid;
   grid-template-columns: 180px 1fr;

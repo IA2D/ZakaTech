@@ -46,6 +46,7 @@ body {
   background: linear-gradient(135deg, var(--bg), var(--bg2));
   color: var(--text);
   transition: 0.3s ease;
+  padding-top: 76px;
 }
 
 .container {
@@ -140,8 +141,10 @@ body.light-mode .noise-layer {
 }
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   background: rgba(8, 18, 32, 0.55);
   backdrop-filter: blur(18px);
@@ -452,7 +455,7 @@ body.light-mode .mobile-menu-panel {
 }
 
 .hero {
-  padding: 85px 0 50px;
+  padding: 24px 0 50px;
 }
 .hero-grid {
   display: grid;

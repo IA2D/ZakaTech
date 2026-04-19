@@ -2461,7 +2461,7 @@ function openMobileMenu() {
   const mobileMenuToggle = document.getElementById("mobileMenuToggle");
   if (mobileMenu) {
     mobileMenu.classList.add("active");
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
   }
   if (mobileMenuToggle) {
     mobileMenuToggle.classList.add("active");
@@ -2473,7 +2473,7 @@ function closeMobileMenu() {
   const mobileMenuToggle = document.getElementById("mobileMenuToggle");
   if (mobileMenu) {
     mobileMenu.classList.remove("active");
-    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
   }
   if (mobileMenuToggle) {
     mobileMenuToggle.classList.remove("active");

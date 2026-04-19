@@ -102,8 +102,49 @@
         </div>
 
         <button id="themeToggle" class="theme-toggle">🌙</button>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="فتح القائمة">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
       </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-backdrop"></div>
+      <div class="mobile-menu-panel">
+        <button id="mobileMenuClose" class="mobile-menu-close" aria-label="إغلاق القائمة">✕</button>
+        <div class="mobile-menu-content">
+          <div class="mobile-nav-links">
+            <a href="#home" class="mobile-nav-link">الرئيسية</a>
+            <a href="#tests" class="mobile-nav-link">الاختبارات</a>
+            <a href="#scientists" class="mobile-nav-link">العلماء</a>
+            <a href="#result" class="mobile-nav-link">النتيجة</a>
+            <a href="#history" class="mobile-nav-link">السجل</a>
+            <a href="#developers" class="mobile-nav-link">المطورين</a>
+            <a href="admin.html" id="mobileAdminNavLink" class="mobile-nav-link hidden">لوحة الأدمن</a>
+          </div>
+          <div class="mobile-nav-auth">
+            <!-- Guest buttons -->
+            <div id="mobileNavGuest" class="mobile-nav-auth-buttons">
+              <button class="btn btn-soft" onclick="openAuthModal('login'); closeMobileMenu();">دخول</button>
+              <button class="btn btn-primary" onclick="openAuthModal('register'); closeMobileMenu();">تسجيل</button>
+            </div>
+            <!-- Logged in user info -->
+            <div id="mobileNavUser" class="mobile-nav-user hidden">
+              <div class="mobile-user-info">
+                <span id="mobileNavUserName" class="mobile-user-name"></span>
+                <span id="mobileNavAdminBadge" class="admin-badge hidden">أدمن</span>
+              </div>
+              <button class="btn btn-soft" onclick="logoutUser(); closeMobileMenu();">خروج</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 1) الرئيسية -->
     <header class="hero" id="home">

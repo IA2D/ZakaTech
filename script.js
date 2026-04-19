@@ -1046,6 +1046,13 @@ function refreshSessionUI() {
   const adminNavLink = document.getElementById("adminNavLink");
   const testsLockMsg = document.getElementById("testsLockMsg");
 
+  // Update mobile menu auth state
+  const mobileNavGuest = document.getElementById("mobileNavGuest");
+  const mobileNavUser = document.getElementById("mobileNavUser");
+  const mobileNavUserName = document.getElementById("mobileNavUserName");
+  const mobileNavAdminBadge = document.getElementById("mobileNavAdminBadge");
+  const mobileAdminNavLink = document.getElementById("mobileAdminNavLink");
+
   if (currentUser) {
     // Show user info in navbar
     if (navGuest) navGuest.classList.add("hidden");
@@ -1058,9 +1065,20 @@ function refreshSessionUI() {
     if (currentUser.isAdmin) {
       if (navAdminBadge) navAdminBadge.classList.remove("hidden");
       if (adminNavLink) adminNavLink.classList.remove("hidden");
+      if (mobileNavAdminBadge) mobileNavAdminBadge.classList.remove("hidden");
+      if (mobileAdminNavLink) mobileAdminNavLink.classList.remove("hidden");
     } else {
       if (navAdminBadge) navAdminBadge.classList.add("hidden");
       if (adminNavLink) adminNavLink.classList.add("hidden");
+      if (mobileNavAdminBadge) mobileNavAdminBadge.classList.add("hidden");
+      if (mobileAdminNavLink) mobileAdminNavLink.classList.add("hidden");
+    }
+
+    // Update mobile menu auth state
+    if (mobileNavGuest) mobileNavGuest.classList.add("hidden");
+    if (mobileNavUser) {
+      mobileNavUser.classList.remove("hidden");
+      if (mobileNavUserName) mobileNavUserName.textContent = currentUser.fullName;
     }
 
     // Update tests lock message
@@ -1073,6 +1091,12 @@ function refreshSessionUI() {
     if (navUser) navUser.classList.add("hidden");
     if (navAdminBadge) navAdminBadge.classList.add("hidden");
     if (adminNavLink) adminNavLink.classList.add("hidden");
+
+    // Update mobile menu auth state
+    if (mobileNavGuest) mobileNavGuest.classList.remove("hidden");
+    if (mobileNavUser) mobileNavUser.classList.add("hidden");
+    if (mobileNavAdminBadge) mobileNavAdminBadge.classList.add("hidden");
+    if (mobileAdminNavLink) mobileAdminNavLink.classList.add("hidden");
 
     // Update tests lock message
     if (testsLockMsg) {
@@ -2430,6 +2454,56 @@ async function modalRegister() {
 }
 
 // =====================
+// Mobile Menu
+// =====================
+function openMobileMenu() {
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+  if (mobileMenu) {
+    mobileMenu.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+  if (mobileMenuToggle) {
+    mobileMenuToggle.classList.add("active");
+  }
+}
+
+function closeMobileMenu() {
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+  if (mobileMenu) {
+    mobileMenu.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+  if (mobileMenuToggle) {
+    mobileMenuToggle.classList.remove("active");
+  }
+}
+
+// Initialize mobile menu listeners
+document.addEventListener("DOMContentLoaded", function() {
+  const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+  const mobileMenuClose = document.getElementById("mobileMenuClose");
+  const mobileMenuBackdrop = document.querySelector(".mobile-menu-backdrop");
+
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener("click", openMobileMenu);
+  }
+  if (mobileMenuClose) {
+    mobileMenuClose.addEventListener("click", closeMobileMenu);
+  }
+  if (mobileMenuBackdrop) {
+    mobileMenuBackdrop.addEventListener("click", closeMobileMenu);
+  }
+
+  // Close mobile menu on nav link click
+  const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+  mobileNavLinks.forEach(link => {
+    link.addEventListener("click", closeMobileMenu);
+  });
+});
+
+// =====================
 // Expose (onclick)
 // =====================
 window.registerUser = registerUser;
@@ -2440,6 +2514,8 @@ window.closeAuthModal = closeAuthModal;
 window.switchAuthForm = switchAuthForm;
 window.modalLogin = modalLogin;
 window.modalRegister = modalRegister;
+window.openMobileMenu = openMobileMenu;
+window.closeMobileMenu = closeMobileMenu;
 
 window.startSelectedTest = startSelectedTest;
 

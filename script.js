@@ -2517,6 +2517,20 @@ window.modalRegister = modalRegister;
 window.openMobileMenu = openMobileMenu;
 window.closeMobileMenu = closeMobileMenu;
 
+// =====================
+// Hero CTA Handler
+// =====================
+function handleStartNow() {
+  if (currentUser) {
+    // User is logged in, go to tests section
+    document.getElementById("tests").scrollIntoView({ behavior: "smooth" });
+  } else {
+    // User is not logged in, show signup form
+    openAuthModal("register");
+  }
+}
+window.handleStartNow = handleStartNow;
+
 window.startSelectedTest = startSelectedTest;
 
 window.saveCurrentAnswer = saveCurrentAnswer;

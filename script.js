@@ -640,6 +640,12 @@ async function downloadCertificatePDF() {
   const certificate = certBox.querySelector('.certificate');
   if (!certificate) return;
 
+  // Check if libraries are loaded
+  if (typeof window.html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+    alert('جاري تحميل المكتبات... يرجى المحاولة مرة أخرى بعد ثانية.');
+    return;
+  }
+
   // Show loading indicator
   const btn = document.querySelector('#certificateBox .btn');
   const originalText = btn ? btn.textContent : '';
@@ -695,7 +701,7 @@ async function downloadCertificatePDF() {
     document.body.appendChild(tempContainer);
 
     // Use html2canvas to capture the certificate
-    const canvas = await html2canvas(clone, {
+    const canvas = await window.html2canvas(clone, {
       scale: 2,
       useCORS: true,
       allowTaint: true,

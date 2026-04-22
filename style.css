@@ -2249,6 +2249,77 @@ body.light-mode .brain3d-hint {
   }
 }
 
+/* Meaning Cards (Mobile) */
+.meaning-cards {
+  display: none;
+}
+
+.meaning-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.meaning-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.meaning-card-range,
+.meaning-card-score {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.meaning-card-meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.meaning-card-body {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Desktop/Mobile visibility */
+.desktop-only {
+  display: table;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  .meaning-cards {
+    display: block;
+  }
+
+  .raw-score-cards {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+}
+
 .type-bars {
   display: grid;
   gap: 10px;

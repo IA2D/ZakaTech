@@ -663,18 +663,20 @@ async function downloadCertificatePDF() {
     const btnContainer = clone.querySelector('.actions-center');
     if (btnContainer) btnContainer.remove();
 
-    // Create temporary container for rendering
+    // Create temporary container for rendering (use visibility instead of off-screen)
     const tempContainer = document.createElement('div');
     tempContainer.style.cssText = `
       position: fixed;
-      top: -9999px;
-      left: -9999px;
+      top: 0;
+      left: 0;
       width: 297mm;
       height: 210mm;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: -9999;
       background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
       padding: 0;
       margin: 0;
-      z-index: -1;
     `;
 
     // Apply certificate styles to clone
@@ -695,19 +697,32 @@ async function downloadCertificatePDF() {
       color: #5a3a00;
       font-family: 'Cairo', sans-serif;
       box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     `;
 
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
+
+    // Force reflow and wait for mobile render
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     // Use html2canvas to capture the certificate
     const canvas = await window.html2canvas(clone, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: null,
+      backgroundColor: '#fff9e6',
       width: 1123, // 297mm at 96 DPI
       height: 794, // 210mm at 96 DPI
+      logging: false,
+      onclone: (clonedDoc) => {
+        const clonedElement = clonedDoc.querySelector('.certificate');
+        if (clonedElement) {
+          clonedElement.style.visibility = 'visible';
+        }
+      }
     });
 
     // Remove temp container

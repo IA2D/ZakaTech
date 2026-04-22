@@ -663,18 +663,19 @@ async function downloadCertificatePDF() {
     const btnContainer = clone.querySelector('.actions-center');
     if (btnContainer) btnContainer.remove();
 
-    // Create temporary container for rendering (use visibility instead of off-screen)
+    // Create temporary container for rendering
     const tempContainer = document.createElement('div');
+    tempContainer.id = 'pdf-capture-container';
     tempContainer.style.cssText = `
       position: fixed;
-      top: 0;
-      left: 0;
+      top: -10000px;
+      left: -10000px;
       width: 297mm;
       height: 210mm;
-      visibility: hidden;
+      opacity: 1;
       pointer-events: none;
-      z-index: -9999;
-      background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
+      z-index: 1;
+      background: #fff9e6;
       padding: 0;
       margin: 0;
     `;
@@ -704,25 +705,26 @@ async function downloadCertificatePDF() {
     tempContainer.appendChild(clone);
     document.body.appendChild(tempContainer);
 
-    // Force reflow and wait for mobile render
-    await new Promise(resolve => requestAnimationFrame(resolve));
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // Force layout recalculation
+    void tempContainer.offsetHeight;
 
-    // Use html2canvas to capture the certificate
-    const canvas = await window.html2canvas(clone, {
+    // Wait for fonts and rendering
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Use html2canvas to capture - use the tempContainer for full context
+    const canvas = await window.html2canvas(tempContainer, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#fff9e6',
-      width: 1123, // 297mm at 96 DPI
-      height: 794, // 210mm at 96 DPI
-      logging: false,
-      onclone: (clonedDoc) => {
-        const clonedElement = clonedDoc.querySelector('.certificate');
-        if (clonedElement) {
-          clonedElement.style.visibility = 'visible';
-        }
-      }
+      width: 1123,
+      height: 794,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: 1123,
+      windowHeight: 794,
     });
 
     // Remove temp container

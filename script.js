@@ -631,259 +631,115 @@ function copyText(text) {
 }
 
 // =====================
-// Print Functions
+// PDF Download Functions
 // =====================
-function printCertificate() {
-  // Get the certificate HTML
+async function downloadCertificatePDF() {
   const certBox = document.getElementById('certificateBox');
   if (!certBox) return;
 
-  const certHTML = certBox.innerHTML;
+  const certificate = certBox.querySelector('.certificate');
+  if (!certificate) return;
 
-  // Create a new window with A4 landscape dimensions (ratio 1.414:1)
-  const printWindow = window.open('', '_blank', 'width=1400,height=990');
-
-  if (!printWindow) {
-    alert('تم منع فتح النافذة الجديدة. يرجى السماح بالنوافذ المنبثقة للطباعة.');
-    return;
+  // Show loading indicator
+  const btn = document.querySelector('#certificateBox .btn');
+  const originalText = btn ? btn.textContent : '';
+  if (btn) {
+    btn.textContent = 'جاري إنشاء PDF...';
+    btn.disabled = true;
   }
 
-  printWindow.document.write(`
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شهادة إتمام - ذكاء تك</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  try {
+    // Wait for fonts to load
+    await document.fonts.ready;
 
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    // Create a clone for rendering without the button
+    const clone = certificate.cloneNode(true);
+    const btnContainer = clone.querySelector('.actions-center');
+    if (btnContainer) btnContainer.remove();
 
-    .cert-wrapper {
-      width: 100%;
-      max-width: 1000px;
-      aspect-ratio: 1.414 / 1;
-    }
-
-    .certificate {
+    // Create temporary container for rendering
+    const tempContainer = document.createElement('div');
+    tempContainer.style.cssText = `
+      position: fixed;
+      top: -9999px;
+      left: -9999px;
+      width: 297mm;
+      height: 210mm;
       background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
+      padding: 0;
+      margin: 0;
+      z-index: -1;
+    `;
+
+    // Apply certificate styles to clone
+    clone.style.cssText = `
+      width: 297mm;
+      height: 210mm;
+      max-width: none;
+      border-radius: 0;
       border: 4px solid #f1c15d;
-      border-radius: 30px;
-      padding: 50px 60px;
-      text-align: center;
-      color: #5a3a00;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      height: 100%;
+      padding: 40px 50px;
+      margin: 0;
+      background: linear-gradient(145deg, #fff9e6 0%, #fffef9 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-    }
-
-    .certificate h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #8a5c00;
-    }
-
-    .certificate .name {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #8a5c00;
-      margin: 20px 0;
-    }
-
-    .certificate p {
-      font-size: 1.2rem;
-      margin: 12px 0;
-      line-height: 1.8;
-    }
-
-    .certificate strong {
-      color: #8a5c00;
-    }
-
-    .stamp {
-      width: 150px;
-      height: 150px;
-      margin: 30px auto 0;
-      border-radius: 50%;
-      border: 4px dashed #d62828;
-      display: grid;
-      place-items: center;
-      color: #d62828;
-      font-weight: 900;
-      font-size: 1.1rem;
-      transform: rotate(-10deg);
-    }
-
-    .actions-center {
-      margin-top: 30px;
-    }
-
-    .btn {
-      padding: 12px 30px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Cairo', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, #f1c15d, #e6a93c);
+      text-align: center;
       color: #5a3a00;
-    }
+      font-family: 'Cairo', sans-serif;
+      box-sizing: border-box;
+    `;
 
-    .btn-gold:hover {
-      background: linear-gradient(135deg, #e6a93c, #d4942a);
-    }
+    tempContainer.appendChild(clone);
+    document.body.appendChild(tempContainer);
 
-    /* Print styles - fixed A4 dimensions */
-    @media print {
-      @page {
-        size: 297mm 210mm;
-        margin: 0;
-      }
-
-      body {
-        background: white;
-        padding: 0;
-        margin: 0;
-        width: 297mm;
-        height: 210mm;
-      }
-
-      .cert-wrapper {
-        width: 297mm;
-        height: 210mm;
-        max-width: none;
-        aspect-ratio: auto;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .certificate {
-        width: 297mm;
-        height: 210mm;
-        max-width: none;
-        border-radius: 0;
-        /* Border is inherited from regular styles */
-        box-shadow: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        page-break-after: avoid;
-        margin: 0;
-        padding: 40px 50px;
-      }
-
-      .actions-center {
-        display: none;
-      }
-
-      .certificate h2 {
-        font-size: 2rem;
-      }
-
-      .certificate .name {
-        font-size: 1.8rem;
-      }
-
-      .certificate p {
-        font-size: 1rem;
-      }
-
-      .stamp {
-        width: 120px;
-        height: 120px;
-        margin-top: 20px;
-      }
-    }
-
-    /* Mobile screen styles */
-    @media screen and (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-
-      .cert-wrapper {
-        aspect-ratio: 1.414 / 1;
-      }
-
-      .certificate {
-        padding: 30px 25px;
-        border-radius: 20px;
-      }
-
-      .certificate h2 {
-        font-size: 1.6rem;
-        margin-bottom: 12px;
-      }
-
-      .certificate .name {
-        font-size: 1.4rem;
-        margin: 12px 0;
-      }
-
-      .certificate p {
-        font-size: 0.95rem;
-        margin: 8px 0;
-        line-height: 1.6;
-      }
-
-      .stamp {
-        width: 100px;
-        height: 100px;
-        margin-top: 20px;
-        font-size: 0.9rem;
-      }
-    }
-  </style>
-  <script>
-    /* Keyboard shortcut for print */
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-        e.preventDefault();
-        window.print();
-      }
+    // Use html2canvas to capture the certificate
+    const canvas = await html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null,
+      width: 1123, // 297mm at 96 DPI
+      height: 794, // 210mm at 96 DPI
     });
-  </script>
-</head>
-<body>
-  <div class="cert-wrapper">
-    ${certHTML.replace(/onclick="[^"]*"/g, '').replace(/class="btn btn-gold"/, 'class="btn btn-gold" onclick="window.print()"').replace(/>فتح الشهادة للطباعة ↗</, '>طباعة 🖨️<')}
-  </div>
-  <script>
-    // Auto-focus and show print hint
-    window.onload = () => {
-      document.title = 'اضغط Ctrl+P للطباعة | ذكاء تك';
-    };
-  </script>
-</body>
-</html>
-  `);
 
-  printWindow.document.close();
+    // Remove temp container
+    document.body.removeChild(tempContainer);
+
+    // Create PDF using jsPDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    // Add image to PDF
+    const imgData = canvas.toDataURL('image/png', 1.0);
+    pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+
+    // Get user name for filename
+    const nameEl = certificate.querySelector('.name');
+    const userName = nameEl ? nameEl.textContent.trim().replace(/\s+/g, '_') : 'certificate';
+
+    // Download PDF
+    pdf.save(`شهادة_ذكاء_تك_${userName}.pdf`);
+
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    alert('حدث خطأ أثناء إنشاء PDF. يرجى المحاولة مرة أخرى.');
+  } finally {
+    if (btn) {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  }
+}
+
+// Legacy function - now redirects to PDF download
+function printCertificate() {
+  downloadCertificatePDF();
 }
 
 function printResult() {
@@ -2305,7 +2161,7 @@ function renderResult(r) {
       <p>التاريخ: <strong>${new Date(r.createdAt).toLocaleDateString("ar-EG")}</strong></p>
       <div class="stamp">معتمد<br>تعليميًا</div>
       <div class="actions-center">
-        <button class="btn btn-gold" onclick="printCertificate()">فتح الشهادة للطباعة ↗</button>
+        <button class="btn btn-gold" onclick="downloadCertificatePDF()">تحميل الشهادة PDF ↓</button>
       </div>
     </div>
   `;
@@ -2649,3 +2505,5 @@ window.submitTest = submitTest;
 
 window.copyText = copyText;
 window.openResultFromHistory = openResultFromHistory;
+window.downloadCertificatePDF = downloadCertificatePDF;
+window.printCertificate = printCertificate;

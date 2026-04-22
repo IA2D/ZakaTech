@@ -640,14 +640,20 @@ function printCertificate() {
 
   const certHTML = certBox.innerHTML;
 
-  // Create a new window with only the certificate
-  const printWindow = window.open('', '_blank', 'width=1200,height=800');
+  // Create a new window with A4 landscape dimensions (ratio 1.414:1)
+  const printWindow = window.open('', '_blank', 'width=1400,height=990');
+
+  if (!printWindow) {
+    alert('تم منع فتح النافذة الجديدة. يرجى السماح بالنوافذ المنبثقة للطباعة.');
+    return;
+  }
 
   printWindow.document.write(`
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>شهادة إتمام - ذكاء تك</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -670,6 +676,7 @@ function printCertificate() {
     .cert-wrapper {
       width: 100%;
       max-width: 1000px;
+      aspect-ratio: 1.414 / 1;
     }
 
     .certificate {
@@ -680,6 +687,12 @@ function printCertificate() {
       text-align: center;
       color: #5a3a00;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     .certificate h2 {
@@ -742,10 +755,10 @@ function printCertificate() {
       background: linear-gradient(135deg, #e6a93c, #d4942a);
     }
 
-    /* Print styles - full page */
+    /* Print styles - fixed A4 dimensions */
     @media print {
       @page {
-        size: A4 landscape;
+        size: 297mm 210mm;
         margin: 0;
       }
 
@@ -753,12 +766,15 @@ function printCertificate() {
         background: white;
         padding: 0;
         margin: 0;
+        width: 297mm;
+        height: 210mm;
       }
 
       .cert-wrapper {
-        width: 100vw;
-        height: 100vh;
+        width: 297mm;
+        height: 210mm;
         max-width: none;
+        aspect-ratio: auto;
         padding: 0;
         display: flex;
         align-items: center;
@@ -766,8 +782,8 @@ function printCertificate() {
       }
 
       .certificate {
-        width: 100%;
-        height: 100%;
+        width: 297mm;
+        height: 210mm;
         max-width: none;
         border-radius: 0;
         /* Border is inherited from regular styles */
@@ -778,10 +794,68 @@ function printCertificate() {
         align-items: center;
         page-break-after: avoid;
         margin: 0;
+        padding: 40px 50px;
       }
 
       .actions-center {
         display: none;
+      }
+
+      .certificate h2 {
+        font-size: 2rem;
+      }
+
+      .certificate .name {
+        font-size: 1.8rem;
+      }
+
+      .certificate p {
+        font-size: 1rem;
+      }
+
+      .stamp {
+        width: 120px;
+        height: 120px;
+        margin-top: 20px;
+      }
+    }
+
+    /* Mobile screen styles */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .cert-wrapper {
+        aspect-ratio: 1.414 / 1;
+      }
+
+      .certificate {
+        padding: 30px 25px;
+        border-radius: 20px;
+      }
+
+      .certificate h2 {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+      }
+
+      .certificate .name {
+        font-size: 1.4rem;
+        margin: 12px 0;
+      }
+
+      .certificate p {
+        font-size: 0.95rem;
+        margin: 8px 0;
+        line-height: 1.6;
+      }
+
+      .stamp {
+        width: 100px;
+        height: 100px;
+        margin-top: 20px;
+        font-size: 0.9rem;
       }
     }
   </style>

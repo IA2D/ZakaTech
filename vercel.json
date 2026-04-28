@@ -15,6 +15,7 @@
           "api-client.js",
           "admin.js",
           "images/**",
+          "videos/**",
           "sounds/**",
           "model/**",
           "database.js",

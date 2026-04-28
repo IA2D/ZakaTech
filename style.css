@@ -1571,7 +1571,7 @@ body.light-mode .field-test-media-card {
 }
 
 .field-test-video-frame {
-  min-height: 220px;
+  min-height: 100px;
   aspect-ratio: 16 / 9;
 }
 
@@ -1744,7 +1744,7 @@ body.light-mode .field-test-media-card {
   }
 
   .field-test-video-frame {
-    min-height: 190px;
+    min-height: 100px;
   }
 }
 .logo-mark {
